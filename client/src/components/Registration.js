@@ -13,6 +13,7 @@ const Registration = () => {
   const [name, setName] = useState("");
   const [roll, setRoll] = useState("");
   const [clg, setClg] = useState(null);
+  const [department, setdepartment] = useState(null);
 
   useEffect(() => {
     const userdata = JSON.parse(localStorage.getItem("gdsc_student_token"));
@@ -41,9 +42,10 @@ const Registration = () => {
         url,
 
         {
-          name,
+          name,    
           roll,
-          department: clg,
+          department,
+          college: clg,
           token: JSON.parse(localStorage.getItem("gdsc_student_token")).token,
         },
         {
@@ -106,7 +108,33 @@ const Registration = () => {
           />
         </FormGroup>
         <FormGroup>
-          <Label for="select_clg_dprt">Select College/Department</Label>
+          <Label for="select_clg_dprt">Select Department</Label>
+          <Input
+            id="select_clg_dprt"
+            name="select"
+            type="select"
+            value={department}
+            onChange={(e) => setdepartment(e.target.value)}
+          >
+            <option disabled selected value={null}>
+              Select Department
+            </option>
+            <option value={"IT"}>
+              IT
+            </option>
+            <option value={"CSE"}>
+              CSE
+            </option>
+            <option value={"ME"}>
+              ME 
+            </option>
+            <option value={"ECE"}>
+              ECE 
+            </option>
+          </Input>
+        </FormGroup>
+        <FormGroup>
+          <Label for="select_clg_dprt">Select College</Label>
           <Input
             id="select_clg_dprt"
             name="select"
@@ -115,19 +143,19 @@ const Registration = () => {
             onChange={(e) => setClg(e.target.value)}
           >
             <option disabled selected value={null}>
-              Select College/Department
+              Select College
             </option>
-            <option value={"CEC - IT/CSE 2nd Year onwards"}>
-              CEC - IT/CSE {"(2nd Year onwards)"}
+            <option value={"CEC"}>
+              CEC {"(2nd Year onwards)"}
             </option>
-            <option value={"CEC - ME/ECE 2nd Year onwards"}>
+            {/* <option value={"CEC - ME/ECE 2nd Year onwards"}>
               CEC - ME/ECE {"(2nd Year onwards)"}
-            </option>
-            <option value={"Applied Science - IT/CSE 1st Year"}>
+            </option> */}
+            {/* <option value={"Applied Science - IT/CSE 1st Year"}>
               Applied Science - IT/CSE {"(1st Year)"}
-            </option>
-            <option value={"Applied Science - ME/ECE 1st Year"}>
-              Applied Science - ME/ECE {"(1st Year)"}
+            </option> */}
+            <option value={"Applied Science"}>
+              Applied Science {"(1st Year)"}
             </option>
           </Input>
         </FormGroup>

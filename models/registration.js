@@ -11,6 +11,9 @@ const registrationSchema = new mongoose.Schema(
     department: {
       type: String,
     },
+    college: {
+        type: String,
+      },
     token: {
         type: String
     }
