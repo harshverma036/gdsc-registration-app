@@ -39,16 +39,17 @@ const Registration = () => {
       );
       const { data } = await axios.post(
         url,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
+
         {
           name,
           roll,
           department: clg,
           token: JSON.parse(localStorage.getItem("gdsc_student_token")).token,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
       );
       console.log(data);
