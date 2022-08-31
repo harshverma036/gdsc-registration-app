@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const Registration = () => {
   const { token } = useParams();
-//   console.log(token, "ttoookkeenn");
+  //   console.log(token, "ttoookkeenn");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(true);
@@ -15,24 +15,53 @@ const Registration = () => {
   const [clg, setClg] = useState(null);
 
   useEffect(() => {
+    const userdata = JSON.parse(localStorage.getItem("gdsc_student_token"));
+    console.log(userdata);
     if (!localStorage.getItem("gdsc_student_token")) {
+      console.log("adsfhjhasdf");
       navigate(`/unauthorized`);
     } else if (
-      localStorage.getItem("gdsc_student_token") &&
-      localStorage.getItem("gdsc_student_token") !== token
+      userdata &&
+      (userdata.token !== token || userdata.isRegistered)
     ) {
+      console.log("this one");
       navigate(`/unauthorized`);
     }
   }, []);
 
   const onClickHandle = async () => {
     try {
-      const url = `${URL}/gen-token`;
+      setLoading(true);
+      const url = `${URL}/registration`;
       console.log(url);
-      const { data } = await axios.get(url);
+      const localStorageItem = JSON.parse(
+        localStorage.getItem("gdsc_student_token")
+      );
+      const { data } = await axios.post(
+        url,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+        {
+          name,
+          roll,
+          department: clg,
+          token: JSON.parse(localStorage.getItem("gdsc_student_token")).token,
+        }
+      );
       console.log(data);
+      localStorageItem.isRegistered = true;
+      localStorage.setItem(
+        "gdsc_student_token",
+        JSON.stringify(localStorageItem)
+      );
+      setLoading(false);
+      navigate(`/success`);
     } catch (error) {
       console.log(error);
+      navigate(`/unauthorized`);
     }
   };
 

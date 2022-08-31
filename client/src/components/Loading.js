@@ -13,7 +13,10 @@ const Loading = () => {
       const { data } = await axios.get(url);
       console.log(data, "data");
       if (data) {
-        localStorage.setItem("gdsc_student_token", data);
+        localStorage.setItem("gdsc_student_token", JSON.stringify({
+            token: data,
+            isRegistered: false
+        }));
         navigate(`/registration/${data}`);
       }
     } catch (error) {
