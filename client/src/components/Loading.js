@@ -13,7 +13,7 @@ const Loading = () => {
       const { data } = await axios.get(url);
       console.log(data, "data");
       if (data) {
-        localStorage.setItem("gdsc_student_token", JSON.stringify({
+        localStorage.setItem("gdsc_student_token_android", JSON.stringify({
             token: data,
             isRegistered: false
         }));

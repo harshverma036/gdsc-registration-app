@@ -11,14 +11,15 @@ const Registration = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(true);
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [roll, setRoll] = useState("");
   const [clg, setClg] = useState(null);
   const [department, setdepartment] = useState(null);
 
   useEffect(() => {
-    const userdata = JSON.parse(localStorage.getItem("gdsc_student_token"));
+    const userdata = JSON.parse(localStorage.getItem("gdsc_student_token_android"));
     console.log(userdata);
-    if (!localStorage.getItem("gdsc_student_token")) {
+    if (!localStorage.getItem("gdsc_student_token_android")) {
       console.log("adsfhjhasdf");
       navigate(`/unauthorized`);
     } else if (
@@ -36,7 +37,7 @@ const Registration = () => {
       const url = `${URL}/registration`;
       console.log(url);
       const localStorageItem = JSON.parse(
-        localStorage.getItem("gdsc_student_token")
+        localStorage.getItem("gdsc_student_token_android")
       );
       const { data } = await axios.post(
         url,
@@ -46,7 +47,8 @@ const Registration = () => {
           roll,
           department,
           college: clg,
-          token: JSON.parse(localStorage.getItem("gdsc_student_token")).token,
+          email,
+          token: JSON.parse(localStorage.getItem("gdsc_student_token_android")).token,
         },
         {
           headers: {
@@ -57,7 +59,7 @@ const Registration = () => {
       console.log(data);
       localStorageItem.isRegistered = true;
       localStorage.setItem(
-        "gdsc_student_token",
+        "gdsc_student_token_android",
         JSON.stringify(localStorageItem)
       );
       setLoading(false);
@@ -105,6 +107,19 @@ const Registration = () => {
             required
             value={roll}
             onChange={(e) => setRoll(e.target.value)}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="email">Email</Label>
+          <Input
+            id="email"
+            name="email"
+            placeholder="Email"
+            type="text"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </FormGroup>
         <FormGroup>

@@ -12,17 +12,20 @@ const registrationSchema = new mongoose.Schema(
       type: String,
     },
     college: {
-        type: String,
-      },
+      type: String,
+    },
+    email: {
+      type: String,
+    },
     token: {
-        type: String
-    }
+      type: String,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Registration = mongoose.model('Registration', registrationSchema);
+const Registration = mongoose.model("Registration", registrationSchema);
 
 module.exports = Registration;
