@@ -55,7 +55,7 @@ app.get("/getdata", async (req, res) => {
         if (fdata.length) {
           const isemail = await fdata.find(x => x.email === allEmails[i]);
           if (!isemail) {
-            fdata.push(data);
+            fdata.push(data[0]);
           }
         } else {
           fdata.push(data);
