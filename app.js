@@ -6,12 +6,11 @@ const dotenv = require("dotenv");
 const Registration = require("./models/registration");
 const { connectDB } = require("./db");
 
-
 dotenv.config();
 
 const app = express();
 
-connectDB()
+connectDB();
 app.use(cors());
 app.use(express.json());
 // app.get("/", (req, res) => res.send("Api is runnig"));
@@ -35,6 +34,33 @@ app.post("/registration", async (req, res) => {
       status: "failed",
       msg: "Internal server error",
     });
+  }
+});
+
+app.get("/getdata", async (req, res) => {
+  try {
+    const all = await Registration.find({}).lean();
+
+    const allEmails = all.map((x) => x.email);
+
+    const fdata = [];
+
+    for (let i = 0; i < allEmails.length; i++) {
+      const data = await Registration.find({
+        email: allEmails[i],
+      }).lean();
+
+      console.log(data.length, "length");
+      if (data.length === 4) {
+        fdata.push(data);
+      }
+    }
+
+    return res.json({
+      data: fdata,
+    });
+  } catch (error) {
+    console.log(error);
   }
 });
 
