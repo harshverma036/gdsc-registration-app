@@ -52,7 +52,15 @@ app.get("/getdata", async (req, res) => {
 
       console.log(data.length, "length");
       if (data.length === 4) {
-        fdata.push(data);
+        if (fdata.length) {
+          const isemail = await fdata.find(x => x.email === allEmails[i]);
+          if (!isemail) {
+            fdata.push(data);
+          }
+        } else {
+          fdata.push(data);
+
+        }
       }
     }
 
