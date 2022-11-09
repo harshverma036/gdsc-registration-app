@@ -16,10 +16,15 @@ const Registration = () => {
   const [clg, setClg] = useState(null);
   const [department, setdepartment] = useState(null);
 
+  const [othersclg, setothersClg] = useState(null);
+  const [othersdepartment, setothersdepartment] = useState(null);
+
   useEffect(() => {
-    const userdata = JSON.parse(localStorage.getItem("gdsc_student_token_android"));
+    const userdata = JSON.parse(
+      localStorage.getItem("gdsc_student_token_github_session")
+    );
     console.log(userdata);
-    if (!localStorage.getItem("gdsc_student_token_android")) {
+    if (!localStorage.getItem("gdsc_student_token_github_session")) {
       console.log("adsfhjhasdf");
       navigate(`/unauthorized`);
     } else if (
@@ -37,18 +42,19 @@ const Registration = () => {
       const url = `${URL}/registration`;
       console.log(url);
       const localStorageItem = JSON.parse(
-        localStorage.getItem("gdsc_student_token_android")
+        localStorage.getItem("gdsc_student_token_github_session")
       );
       const { data } = await axios.post(
         url,
 
         {
-          name,    
+          name,
           roll,
-          department,
-          college: clg,
+          department: department === "OTHERS" ? othersdepartment : department,
+          college: clg === "OTHERS" ? othersclg : clg,
           email,
-          token: JSON.parse(localStorage.getItem("gdsc_student_token_android")).token,
+          token: JSON.parse(localStorage.getItem("gdsc_student_token_github_session"))
+            .token,
         },
         {
           headers: {
@@ -59,7 +65,7 @@ const Registration = () => {
       console.log(data);
       localStorageItem.isRegistered = true;
       localStorage.setItem(
-        "gdsc_student_token_android",
+        "gdsc_student_token_github_session",
         JSON.stringify(localStorageItem)
       );
       setLoading(false);
@@ -134,20 +140,29 @@ const Registration = () => {
             <option disabled selected value={null}>
               Select Department
             </option>
-            <option value={"IT"}>
-              IT
-            </option>
-            <option value={"CSE"}>
-              CSE
-            </option>
-            <option value={"ME"}>
-              ME 
-            </option>
-            <option value={"ECE"}>
-              ECE 
-            </option>
+            <option value={"IT"}>IT</option>
+            <option value={"CSE"}>CSE</option>
+            <option value={"ME"}>ME</option>
+            <option value={"ECE"}>ECE</option>
+            <option value={"OTHERS"}>Others</option>
           </Input>
         </FormGroup>
+
+        {department === "OTHERS" && (
+          <FormGroup>
+            <Label for="department">Department</Label>
+            <Input
+              id="department"
+              name="text"
+              placeholder="Department"
+              type="text"
+              required
+              value={othersdepartment}
+              onChange={(e) => setothersdepartment(e.target.value)}
+            />
+          </FormGroup>
+        )}
+
         <FormGroup>
           <Label for="select_clg_dprt">Select College</Label>
           <Input
@@ -160,24 +175,33 @@ const Registration = () => {
             <option disabled selected value={null}>
               Select College
             </option>
-            <option value={"CEC"}>
-              CEC {"(2nd Year onwards)"}
-            </option>
-            {/* <option value={"CEC - ME/ECE 2nd Year onwards"}>
-              CEC - ME/ECE {"(2nd Year onwards)"}
-            </option> */}
-            {/* <option value={"Applied Science - IT/CSE 1st Year"}>
-              Applied Science - IT/CSE {"(1st Year)"}
-            </option> */}
+            <option value={"CEC"}>CEC {"(2nd Year onwards)"}</option>
             <option value={"Applied Science"}>
               Applied Science {"(1st Year)"}
             </option>
+            <option value={"OTHERS"}>Others</option>
           </Input>
         </FormGroup>
+
+        {clg === "OTHERS" && (
+          <FormGroup>
+            <Label for="college">College</Label>
+            <Input
+              id="college"
+              name="text"
+              placeholder="College"
+              type="text"
+              required
+              value={othersclg}
+              onChange={(e) => setothersClg(e.target.value)}
+            />
+          </FormGroup>
+        )}
+
         <Button
           color="danger"
           block
-          disabled={!name || !roll || !clg || loading}
+          disabled={!name || !roll || !clg || loading || (department === "OTHERS" && !othersdepartment) || (clg === "OTHERS" && !othersclg)}
           onClick={() => onClickHandle()}
         >
           {loading && <Spinner size="sm">Loading...</Spinner>} Register

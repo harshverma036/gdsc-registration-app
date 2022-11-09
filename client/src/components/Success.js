@@ -5,7 +5,7 @@ import { Alert } from "reactstrap";
 const Success = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    const userdata = JSON.parse(localStorage.getItem("gdsc_student_token_android"));
+    const userdata = JSON.parse(localStorage.getItem("gdsc_student_token_github_session"));
     if (userdata && !userdata.isRegistered) {
       navigate(`/unauthorized`);
     }
